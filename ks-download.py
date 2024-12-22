@@ -27,7 +27,7 @@ class main:
             if is_in_packages:
                 if "%end" in line:
                     is_in_packages = False
-                elif line:
+                elif line.strip():
                     self.packages.append(line.strip())
             elif "%packages" in line:
                 is_in_packages = True
