@@ -23,6 +23,11 @@ Psudo code:
 Notes:
   dnf download --resolve --alldeps --destdir=packages "firefox"
   dnf group install --downloadonly --downloaddir=packages graphical-server-environment
+
+  dnf install anaconda anaconda-widgets kexec-tools-anaconda-addon anaconda-install-env-deps
+
+  createrepo output
+  mkisofs -o rocky8-custom.iso -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -R -J -v -T output
 """
 
 import subprocess
