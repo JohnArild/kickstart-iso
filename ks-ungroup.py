@@ -18,7 +18,7 @@ def subprocesswrapper(*command):
 class main:
     def __init__(self, input_ks, output_ks):
         self.ks_file = input_ks
-        self.ks_new_file = input_ks
+        self.ks_new_file = output_ks
         self.packages = set()
         self.new_ks = str()
     
@@ -30,6 +30,7 @@ class main:
         return False
 
     def ungroup(self):
+        #Get list of packages in groups
         while self.has_group(self.packages):
             new_package_list = set()
             for package in self.packages:
@@ -56,21 +57,20 @@ class main:
             self.packages = new_package_list
 
     def create_new_ks(self):
-        flat_ks = open("ks.cfg", "r").read()
-        is_in_packages = False
         #Extract packages from kickstart file
-        for line in flat_ks.splitlines():
+        is_in_packages = False
+        for line in open("ks.cfg", "r").readlines():
             if is_in_packages:
                 if "%end" in line:
                     is_in_packages = False
-                    self.new_ks += line + "\n"
+                    self.new_ks += line
                 elif line:
-                    self.packages.add(line)
+                    self.packages.add(line.strip())
             elif "%packages" in line:
                 is_in_packages = True
-                self.new_ks += line + "\n<insert_packages_here>\n"
+                self.new_ks += line + "<insert_packages_here>\n"
             else:
-                self.new_ks += line + "\n"
+                self.new_ks += line
         #Ungroup groups in package list
         self.ungroup()
         #Convert package set to alphabetic list as string
@@ -81,7 +81,7 @@ class main:
         self.new_ks = self.new_ks.replace("<insert_packages_here>", package_list_text)
     
     def save_ks(self):
-        open(self.ks_new_file, "w").write(self.ks_new_file)
+        open(self.ks_new_file, "w").write(self.new_ks)
 
     def run(self):
         self.create_new_ks()
