@@ -45,4 +45,4 @@ class main:
         self.download_packages()
     
 if __name__ == "__main__":
-    main("new_ks.cfg", "packages").run()
+    main("new_ks.cfg", "output/Packages").run()
